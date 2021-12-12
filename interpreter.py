@@ -31,3 +31,20 @@ class Interpreter:
 
     def visit_PowerNode(self, node):
         return Number(math.pow(self.visit(node.node_a).value, self.visit(node.node_b).value))
+
+    def visit_RadicalNode(self, node):
+        return Number(math.sqrt(self.visit(node.node).value))
+
+    def visit_LogNode(self, node):
+        return Number(math.log(self.visit(node.node).value))
+
+    def visit_SinNode(self, node):
+        return Number(math.sin(self.visit(node.node).value))
+
+    def visit_CosNode(self, node):
+        return Number(math.cos(self.visit(node.node).value))
+
+    def visit_TanNode(self, node):
+        return Number(math.tan(self.visit(node.node).value))
+
+

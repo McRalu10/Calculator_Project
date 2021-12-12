@@ -41,16 +41,24 @@ class Parser:
         return result
 
     def term(self):
-        result = self.factor()
+        result = self.power()
 
-        while self.current_token is not None and self.current_token.type in (TokenType.MULTIPLY, TokenType.DIVIDE,
-                                                                             TokenType.POWER):
+        while self.current_token is not None and self.current_token.type in (TokenType.MULTIPLY, TokenType.DIVIDE):
             if self.current_token.type == TokenType.MULTIPLY:
                 self.advance()
-                result = MultiplyNode(result, self.factor())
+                result = MultiplyNode(result, self.power())
             elif self.current_token.type == TokenType.DIVIDE:
                 self.advance()
-                result = DivideNode(result, self.factor())
+                result = DivideNode(result, self.power())
+
+        return result
+
+    def power(self):
+        result = self.factor()
+
+        while self.current_token is not None and self.current_token.type == TokenType.POWER:
+            self.advance()
+            result = PowerNode(result, self.factor())
 
         return result
 
@@ -78,5 +86,25 @@ class Parser:
         elif token.type == TokenType.MINUS:
             self.advance()
             return MinusNode(self.factor())
+
+        elif token.type == TokenType.RADICAL:
+            self.advance()
+            return RadicalNode(self.factor())
+
+        elif token.type == TokenType.LOG:
+            self.advance()
+            return LogNode(self.factor())
+
+        elif token.type == TokenType.SIN:
+            self.advance()
+            return SinNode(self.factor())
+
+        elif token.type == TokenType.COS:
+            self.advance()
+            return CosNode(self.factor())
+
+        elif token.type == TokenType.TAN:
+            self.advance()
+            return TanNode(self.factor())
 
         self.raise_error()
